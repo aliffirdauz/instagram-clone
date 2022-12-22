@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { Text, View, Button } from 'react-native'
 import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,6 +21,7 @@ if (firebase.apps.length === 0) {
 
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
+import LoginScreen from './components/auth/Login';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,7 @@ export class App extends Component {
           <Stack.Navigator initialRouteName='Landing'>
             <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       )
@@ -71,6 +73,10 @@ export class App extends Component {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
         <Text>User is logged in</Text>
+        <Button
+          title="Sign Out"
+          onPress={() => firebase.auth().signOut()}
+        />
       </View>
     )
   }
