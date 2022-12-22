@@ -28,8 +28,13 @@ export class Login extends Component {
   render() {
     return (
       <View>
+<<<<<<< HEAD
         <TextInput style={styles.input}
           placeholder="Email"
+=======
+        <TextInput
+          placeholder="email"
+>>>>>>> 0814c931ae57b23d280633532ed4e5316d203938
           onChangeText={(email) => this.setState({ email })}
         />
         <TextInput style={styles.input}
