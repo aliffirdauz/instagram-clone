@@ -12,10 +12,10 @@ export class Login extends Component {
       password: '',
     }
 
-    this.onSignUp = this.onSignUp.bind(this)
+    this.onSignIn = this.onSignIn.bind(this)
   }
 
-  onSignUp() {
+  onSignIn() {
     const { email, password } = this.state
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((result) => {
@@ -28,10 +28,6 @@ export class Login extends Component {
   render() {
     return (
       <View>
-        <TextInput
-          placeholder="name"
-          onChangeText={(name) => this.setState({ name })}
-        />
         <TextInput
           placeholder="email"
           onChangeText={(email) => this.setState({ email })}
