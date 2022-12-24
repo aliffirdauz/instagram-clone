@@ -31,6 +31,7 @@ import LandingScreen from './components/auth/Landing';
 import LoginScreen from './components/auth/Login';
 import RegisterScreen from './components/auth/Register';
 import MainScreen from './components/Main';
+import AddScreen from './components/main/Add';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,7 +75,6 @@ export class App extends Component {
             <Stack.Screen name='Landing' component={LandingScreen} options={{ headerShown: false }} />
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       )
@@ -82,7 +82,12 @@ export class App extends Component {
 
     return (
       <Provider store={store}>
-        <MainScreen />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Main'>
+            <Stack.Screen name='Main' component={MainScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='Add' component={AddScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     )
   }
