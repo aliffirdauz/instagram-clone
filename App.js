@@ -3,6 +3,13 @@ import React, { Component } from 'react'
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './redux/reducers';
+import thunk from 'redux-thunk';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 
@@ -23,6 +30,7 @@ if (firebase.apps.length === 0) {
 import LandingScreen from './components/auth/Landing';
 import LoginScreen from './components/auth/Login';
 import RegisterScreen from './components/auth/Register';
+import MainScreen from './components/Main';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,13 +80,9 @@ export class App extends Component {
     }
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>User is logged in</Text>
-        <Button
-          title="Sign Out"
-          onPress={() => firebase.auth().signOut()}
-        />
-      </View>
+      <Provider store={store}>
+        <MainScreen />
+      </Provider>
     )
   }
 }
