@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, FlatList, Button } from 'react-native';
 import { connect } from 'react-redux';
 
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 require("firebase/compat/firestore")
 
 function Profile(props) {
@@ -48,9 +49,9 @@ function Profile(props) {
         })
     }
 
-    if(props.following.indexOf(props.route.params.uid) > -1) {
+    if (props.following.indexOf(props.route.params.uid) > -1) {
       setFollowing(true);
-    }else {
+    } else {
       setFollowing(false);
     }
 
@@ -58,19 +59,23 @@ function Profile(props) {
 
   const onFollow = () => {
     firebase.firestore()
-    .collection("following")
-    .doc(firebase.auth().currentUser.uid)
-    .collection("userFollowing")
-    .doc(props.route.params.uid)
-    .set({})
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(props.route.params.uid)
+      .set({})
   }
   const onUnfollow = () => {
     firebase.firestore()
-    .collection("following")
-    .doc(firebase.auth().currentUser.uid)
-    .collection("userFollowing")
-    .doc(props.route.params.uid)
-    .delete()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(props.route.params.uid)
+      .delete()
+  }
+
+  const onLogout = () => {
+    firebase.auth().signOut()
   }
 
   if (user === null) {
@@ -89,15 +94,20 @@ function Profile(props) {
                 title="Following"
                 onPress={() => onUnfollow()}
               />
-            ) : 
-            (
-              <Button
-                title="Follow"
-                onPress={() => onFollow()}
-              />
-            )}
+            ) :
+              (
+                <Button
+                  title="Follow"
+                  onPress={() => onFollow()}
+                />
+              )}
           </View>
-        ) : null}
+        ) :
+          <Button
+            title="Logout"
+            onPress={() => onLogout()}
+          />
+        }
       </View>
 
       <View style={styles.containerGallery} >

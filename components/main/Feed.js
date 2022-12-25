@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import firebase from 'firebase/compat/app';
@@ -21,15 +21,12 @@ function Feed(props) {
       posts.sort(function(x,y) {
         return x.creation - y.creation;
       })
-
+      console.log(posts);
       setPosts(posts);
     }
 
   }, [props.usersLoaded])
 
-  if (user === null) {
-    return <View />
-  }
   return (
     <View style={styles.container} >
       <View style={styles.containerGallery} >
