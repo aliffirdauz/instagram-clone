@@ -10,22 +10,22 @@ function Feed(props) {
 
   useEffect(() => {
     let posts = [];
-    if(props.usersLoaded == props.following.length) {
-      for(let i =0; i < props.following.length; i++) {
+    if (props.usersFollowingLoaded == props.following.length) {
+      for (let i = 0; i < props.following.length; i++) {
         const user = props.users.find(el => el.uid === props.following[i]);
-        if(user != undefined) {
+        if (user != undefined) {
           posts = [...posts, ...user.posts];
         }
       }
 
-      posts.sort(function(x,y) {
+      posts.sort(function (x, y) {
         return x.creation - y.creation;
       })
       console.log(posts);
       setPosts(posts);
     }
 
-  }, [props.usersLoaded])
+  }, [props.usersFollowingLoaded])
 
   return (
     <View style={styles.container} >
@@ -41,6 +41,14 @@ function Feed(props) {
                 style={styles.image}
                 source={{ uri: item.downloadURL }}
               />
+              <Text
+                onPress={() =>
+                  props.navigation.navigate('Comment',
+                    { postId: item.id, uid: item.user.uid })
+                }>
+                View Comments...
+              </Text>
+
             </View>
           )}
         />
@@ -74,7 +82,7 @@ const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
   following: store.userState.following,
   users: store.usersState.users,
-  usersLoaded: store.usersState.usersLoaded,
+  usersFollowingLoaded: store.usersState.usersFollowingLoaded,
 })
 
 export default connect(mapStateToProps, null)(Feed);

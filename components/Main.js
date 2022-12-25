@@ -27,19 +27,6 @@ export class Main extends Component {
         this.props.fetchUserFollowing()
     }
     render() {
-        // const { currentUser } = this.props
-        // console.log(currentUser)
-        // if (currentUser == undefined) {
-        //     return (
-        //         <View style={{ flex: 1, justifyContent: 'center' }}>
-        //             <Text>Loading</Text>
-        //             <Button
-        //                 title="Sign Out"
-        //                 onPress={() => firebase.auth().signOut()}
-        //             />
-        //         </View> 
-        //     )
-        // }
         return (
             <Tab.Navigator initialRouteName='Feed' labeled={false}>
                 <Tab.Screen name="Feed" component={FeedScreen}
@@ -79,13 +66,6 @@ export class Main extends Component {
                         ),
                     }} />
             </Tab.Navigator>
-            // <View style={{ flex: 1, justifyContent: 'center' }}>
-            //     <Text>{currentUser.name} is logged in</Text>
-            //     <Button
-            //         title="Sign Out"
-            //         onPress={() => firebase.auth().signOut()}
-            //     />
-            // </View>
         )
     }
 }

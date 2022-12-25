@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
-import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, CLEAR_DATA } from '../constants'
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, CLEAR_DATA } from '../constants'
 
 export function clearData() {
     return ((dispatch) => {
@@ -64,7 +64,7 @@ export function fetchUserFollowing() {
     })
 }
 
-export function fetchUsersData(uid) {
+export function fetchUsersData(uid, getPosts) {
     return ((dispatch, getState) => {
         const found = getState().usersState.users.some(el => el.uid === uid);
 
@@ -85,6 +85,9 @@ export function fetchUsersData(uid) {
                         console.log("does not exist")
                     }
                 })
+            if(getPosts) {
+                dispatch(fetchUsersFollowingPosts(uid));
+            }
         }
     })
 }
@@ -98,8 +101,7 @@ export function fetchUsersFollowingPosts(uid) {
             .orderBy("creation", "asc")
             .get()
             .then((snapshot) => {
-                const uid = snapshot.docs[0].ref.path.split('/')[1]
-                console.log({ snapshot, uid });
+                const uid = snapshot.docs[0].ref.path.split('/')[1];
                 const user = getState().usersState.users.find(el => el.uid === uid);
 
                 let posts = snapshot.docs.map(doc => {
@@ -107,10 +109,7 @@ export function fetchUsersFollowingPosts(uid) {
                     const id = doc.id
                     return { id, ...data, user }
                 })
-                console.log(posts)
-                dispatch({ type: USER_POSTS_STATE_CHANGE, posts, uid })
-                console.log(getState())
-
+                dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid })
             })
     })
 }
