@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image, FlatList, Button } from 'react-native'
 
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore'
 require("firebase/compat/firestore")
 
 import { connect } from 'react-redux';
@@ -21,7 +22,7 @@ function Comment(props) {
                     continue;
                 }
                 const user = props.users.find(x => x.uid === comments[i].creator)
-                if (user == undefined) {
+                if (user === undefined) {
                     props.fetchUsersData(comments[i].creator, false)
                 } else {
                     comments[i].user = user;
@@ -53,7 +54,7 @@ function Comment(props) {
         }
     }, [props.route.params.postId, props.users])
 
-    const onCommandSend = () => {
+    const onCommentSend = () => {
         firebase.firestore()
             .collection("posts")
             .doc(props.route.params.uid)
@@ -61,8 +62,8 @@ function Comment(props) {
             .doc(props.route.params.postId)
             .collection("comments")
             .add({
-                comment: text,
-                name: firebase.auth().currentUser.displayName,
+                creator: firebase.auth().currentUser.uid,
+                text,
                 creation: firebase.firestore.FieldValue.serverTimestamp()
             })
     }
@@ -79,8 +80,7 @@ function Comment(props) {
                             {item.user !== undefined ?
                                 <Text style={styles.name}>{item.user.name}</Text>
                                 : null}
-                            <Text style={styles.comment}>{item.comment}</Text>
-                            <Text style={styles.name}>{item.name}</Text>
+                            <Text style={styles.comment}>{item.text}</Text>
                         </View>
                     )}
                 />
@@ -93,7 +93,7 @@ function Comment(props) {
                 />
                 <Button
                     title="Send"
-                    onPress={() => onCommandSend()}
+                    onPress={() => onCommentSend()}
                 />
             </View>
         </View>
